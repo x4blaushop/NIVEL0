@@ -2,47 +2,59 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>NÍVEL 0</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NÍVEL 0</title>
 
 <style>
 :root {
-  --green: #62ff8a;
+  --neon: #62ff8a;
+  --bg: #000;
 }
 
-html, body {
+* {
   margin: 0;
   padding: 0;
-  background: black;
-  overflow: hidden;
-  height: 100%;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--neon);
   font-family: "Courier New", monospace;
+  overflow: hidden;
 }
 
 canvas {
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 0;
 }
 
-#portal {
-  position: fixed;
-  inset: 0;
+.portal-container {
+  position: relative;
+  z-index: 2;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;
 }
 
-#core {
-  padding: 14px 28px;
-  color: var(--green);
-  border: 1px solid var(--green);
-  background: rgba(0,0,0,0.85);
-  box-shadow: 0 0 35px rgba(98,255,138,.6);
+.portal-btn {
+  padding: 18px 34px;
+  border: 1px solid var(--neon);
+  background: rgba(0,0,0,0.7);
+  color: var(--neon);
+  font-size: 1rem;
   letter-spacing: 2px;
   cursor: pointer;
-  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 0 18px rgba(98,255,138,0.35);
+  transition: all .25s ease;
+}
+
+.portal-btn:hover {
+  background: var(--neon);
+  color: #000;
 }
 </style>
 </head>
@@ -51,82 +63,96 @@ canvas {
 
 <canvas id="matrix"></canvas>
 
-<div id="portal">
-  <a id="core" href="../PLANET-OF-ARCHITECT/">ATRAVESSAR</a>
+<div class="portal-container">
+  <a href="https://x4blaushop.github.io/PLANET-OF-ARCHITECT/" class="portal-btn">
+    ATRAVESSAR
+  </a>
 </div>
 
 <script>
+/* ===============================
+   MATRIX + CAMPO GRAVITACIONAL
+   =============================== */
+
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
-resize();
 
-window.addEventListener("resize", resize);
-
-const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const particles = [];
-const MAX_PARTICLES = 1200;
-
-function resize(){
+function resize() {
   canvas.width = innerWidth;
   canvas.height = innerHeight;
 }
+resize();
+addEventListener("resize", resize);
 
-function spawnParticle() {
-  const side = Math.floor(Math.random() * 4);
-  let x, y;
+// CONFIGURAÇÃO DO ESPAÇO
+const SYMBOLS = "01";
+const TOTAL_PARTICLES = 2400; // 🔥 DENSIDADE ALTA
+const BASE_SPEED = 0.85;      // ⚡ ~2s mais rápido
+const GRAVITY = 1400;
 
-  if (side === 0) { x = Math.random() * canvas.width; y = -40; }
-  if (side === 1) { x = canvas.width + 40; y = Math.random() * canvas.height; }
-  if (side === 2) { x = Math.random() * canvas.width; y = canvas.height + 40; }
-  if (side === 3) { x = -40; y = Math.random() * canvas.height; }
+let particles = [];
 
+function centerOfButton() {
+  const btn = document.querySelector(".portal-btn");
+  const r = btn.getBoundingClientRect();
+  return {
+    x: r.left + r.width / 2,
+    y: r.top + r.height / 2
+  };
+}
+
+// CRIA PARTÍCULAS (ESTRELAS)
+for (let i = 0; i < TOTAL_PARTICLES; i++) {
+  const depth = Math.random(); // profundidade
   particles.push({
-    x, y,
-    char: chars[Math.floor(Math.random() * chars.length)],
-    speed: Math.random() * 0.25 + 0.15,
-    alpha: 1
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    vx: 0,
+    vy: 0,
+    depth,
+    size: 0.6 + depth * 1.4,
+    speed: BASE_SPEED + depth * 0.9,
+    char: SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]
   });
 }
 
-function update() {
-  ctx.fillStyle = "rgba(0,0,0,0.18)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
+function draw() {
+  ctx.fillStyle = "rgba(0,0,0,0.12)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  const rect = document.getElementById("core").getBoundingClientRect();
-  const tx = rect.left + rect.width / 2;
-  const ty = rect.top + rect.height / 2;
-  const forbiddenRadius = rect.width * 0.7;
+  const center = centerOfButton();
 
-  ctx.font = "14px Courier New";
+  for (const p of particles) {
+    const dx = center.x - p.x;
+    const dy = center.y - p.y;
+    const dist = Math.sqrt(dx * dx + dy * dy) + 0.001;
 
-  for (let i = particles.length - 1; i >= 0; i--) {
-    const p = particles[i];
+    // CAMPO GRAVITACIONAL REAL
+    let force = GRAVITY / (dist * dist + 120);
+    force = Math.min(force, 0.08);
 
-    const dx = tx - p.x;
-    const dy = ty - p.y;
-    const dist = Math.hypot(dx, dy);
+    p.vx += (dx / dist) * force;
+    p.vy += (dy / dist) * force;
 
-    if (dist < forbiddenRadius) {
-      particles.splice(i, 1);
-      continue;
+    p.x += p.vx * p.speed;
+    p.y += p.vy * p.speed;
+
+    // RESET QUANDO "ENTRA NO NÚCLEO"
+    if (dist < 12) {
+      p.x = Math.random() < 0.5 ? Math.random() * canvas.width : (Math.random() < 0.5 ? -20 : canvas.width + 20);
+      p.y = Math.random() < 0.5 ? Math.random() * canvas.height : (Math.random() < 0.5 ? -20 : canvas.height + 20);
+      p.vx = p.vy = 0;
     }
 
-    // força gravitacional suave
-    const force = Math.min(2.5, dist / 180);
-    p.x += (dx / dist) * p.speed * force;
-    p.y += (dy / dist) * p.speed * force;
-
-    p.alpha *= 0.994;
-
-    ctx.fillStyle = `rgba(98,255,138,${p.alpha})`;
+    ctx.fillStyle = "rgba(98,255,138,0.85)";
+    ctx.font = `${p.size * 14}px monospace`;
     ctx.fillText(p.char, p.x, p.y);
   }
 
-  while (particles.length < MAX_PARTICLES) spawnParticle();
-  requestAnimationFrame(update);
+  requestAnimationFrame(draw);
 }
 
-update();
+draw();
 </script>
 
 </body>
