@@ -1,114 +1,81 @@
-/* === MATRIX DNA VISUAL APERFEIÇOADO === */
-
-:root {
-  --matrix-green: #00ff88;
-  --matrix-bg: #000;
-  --scanline-opacity: 0.06;
-  --terminal-bg: rgba(0, 0, 0, 0.88);
+:Raiz {
+  --verde-neon: #62ff8a;
+  --bg-escuro: #000;
 }
 
-/* RESET ESTÁVEL */
+/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* FUNDO GERAL */
-html, body {
-  width: 100%;
-  height: 100%;
-  background: var(--matrix-bg);
-  font-family: "Courier New", monospace;
-  overflow: hidden;
+/* CORPO */
+body {
+  background: var(--bg-escuro);
+  color: var(--verde-neon);
+  font-family: "Courier New", Courier, monospace;
+  overflow-x: hidden;
 }
 
-/* CHUVA MATRIX (canvas) */
+/* MATRIZ */
 #matrix {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   z-index: 0;
 }
 
-/* SCANLINES (LINHAS LEVES) */
-#scanlines {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 1px,
-    rgba(0, 0, 0, var(--scanline-opacity)) 2px
-  );
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* CONTEÚDO FLUTUANTE */
-.content {
+/* CAMADA */
+.camada-planetaria {
   position: relative;
   z-index: 2;
+  padding: 60px 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 100vh;
-  padding: 50px 20px;
-  text-align: center;
+  gap: 40px;
 }
 
-/* HEADER */
-header h1 {
-  color: var(--matrix-green);
-  font-size: clamp(2.2rem, 5vw, 3rem);
-  text-shadow: 0 0 8px rgba(0, 255, 136, 0.6),
-               0 0 16px rgba(0, 255, 136, 0.4);
-  letter-spacing: 0.18em;
+/* BLOCOS */
+.bloco {
+  border: 1px solid var(--verde-neon);
+  padding: 20px;
+  max-width: 800px;
 }
 
-header p {
-  margin-top: 6px;
+/* CATEGORIAS */
+.categorias {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.categoria {
+  border: 1px dashed var(--verde-neon);
+  padding: 10px;
+}
+
+.categoria span {
+  font-size: 0.85em;
+  opacity: 0.8;
+}
+
+.categoria.destaque {
+  border: 2px solid var(--verde-neon);
+}
+
+/* NOTA */
+.nota {
+  margin-top: 15px;
+  font-size: 0.8em;
   opacity: 0.7;
-  font-size: 0.9rem;
 }
 
-/* MAIN STATUS */
-main section {
-  margin-top: 80px;
-}
-
-main section h2 {
-  font-size: 1.2rem;
-  opacity: 0.85;
-  letter-spacing: 0.06em;
-}
-
-#status {
-  margin-top: 10px;
-  color: var(--matrix-green);
-  font-family: monospace;
-  font-size: 1rem;
-  text-shadow: 0 0 6px rgba(0, 255, 136, 0.5);
-}
-
-/* RODAPÉ */
-footer {
-  opacity: 0.5;
-  font-size: 0.78rem;
-  margin-top: 30px;
-}
-
-/* MOBILE ADJUST */
-@media (max-width: 600px) {
-  header h1 {
-    font-size: 1.8rem;
-  }
-  main section {
-    margin-top: 60px;
-  }
+/* BOTÃO */
+.botao {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: 1px solid var(--verde-neon);
+  color: var(--verde-neon);
+  text-decoration: none;
 }
