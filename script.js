@@ -1,40 +1,88 @@
-/* STATUS */
-setTimeout(() => {
-  document.getElementById("status").innerText = "Núcleo operacional";
-}, 1200);
-
-/* MATRIX BACKGROUND */
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener("resize", resize);
-
-const letters = "01";
-const fontSize = 14;
-const columns = canvas.width / fontSize;
-const drops = Array.from({ length: columns }).fill(1);
-
-function drawMatrix() {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = "#00ff88";
-  ctx.font = fontSize + "px monospace";
-
-  for (let i = 0; i < drops.length; i++) {
-    const text = letters[Math.floor(Math.random() * letters.length)];
-    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-      drops[i] = 0;
-    }
-    drops[i]++;
-  }
+:root {
+  --neon-green: #62ff8a;
+  --bg-dark: #000;
 }
 
-setInterval(drawMatrix, 50);
+/* RESET BÁSICO */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-dark);
+  color: var(--neon-green);
+  font-family: 'Courier New', Courier, monospace;
+  overflow-x: hidden;
+}
+
+/* CANVAS MATRIX */
+#matrix {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* CAMADA DE CONTEÚDO */
+.planet-layer {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+/* BLOCOS DE INFORMAÇÃO */
+.info-block {
+  width: 100%;
+  max-width: 640px;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid var(--neon-green);
+  padding: 24px;
+  box-shadow: 0 0 20px rgba(98, 255, 138, 0.25);
+}
+
+/* TEXTOS */
+h1, h2 {
+  margin-bottom: 16px;
+  text-shadow: 0 0 8px var(--neon-green);
+}
+
+p {
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* BOTÃO WHATSAPP */
+.whatsapp-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: var(--neon-green);
+  color: #000;
+  text-decoration: none;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 0 12px var(--neon-green);
+  transition: all 0.25s ease;
+}
+
+.whatsapp-btn:hover {
+  background: #000;
+  color: var(--neon-green);
+  outline: 1px solid var(--neon-green);
+}
+
+/* PIX */
+.pix {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
