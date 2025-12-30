@@ -1,176 +1,35 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NÍVEL 0</title>
-
-<style>
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background: #000;
-  font-family: monospace;
-}
-
-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
-#portal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 170px;
-  height: 60px;
-  border: 1px solid #7CFF9E;
-  color: #7CFF9E;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  letter-spacing: 4px;
-  cursor: pointer;
-  z-index: 10;
-  box-shadow: 0 0 25px rgba(124,255,158,0.6);
-  transition: opacity 0.8s ease;
-}
-
-#portal::before {
-  content: "";
-  position: absolute;
-  width: 260px;
-  height: 260px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(0,0,0,0.95) 38%,
-    rgba(124,255,158,0.18) 60%,
-    transparent 72%
-  );
-  z-index: -1;
-}
-
-#warning {
-  position: fixed;
-  bottom: 20px;
-  width: 100%;
-  text-align: center;
-  color: #7CFF9E;
-  opacity: 0.6;
-  font-size: 12px;
-  letter-spacing: 2px;
-}
-
-.fade-out {
-  opacity: 0;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>X4_CELL_V1</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <canvas id="portalCanvas"></canvas>
+    <main>
+        <section class="section">
+            <h1>UNIT_CORE_00</h1>
+            <p>Módulo de habitação digital básica. Licença pendente de ativação.</p>
+        </section>
 
-<canvas id="matrix"></canvas>
+        <section class="section">
+            <div class="portals">
+                <a href="https://wa.me/5511978682202" class="owner-link" target="_blank">
+                    OBTER LICENÇA DE USO
+                </a>
+                <a href="https://x4blaushop.github.io/ESTADO-0-ATRIO-DO-INFITINO/" class="sub-link">
+                    TESTAR COMPATIBILIDADE ➡
+                </a>
+            </div>
+        </section>
 
-<div id="portal">ATRAVESSAR</div>
-
-<div id="warning">
-  AO ATRAVESSAR, VOCÊ DEIXA ESTE PLANO
-</div>
-
-<audio id="portalSound" src="portal.mp3" preload="auto"></audio>
-
-<script>
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
-const portal = document.getElementById("portal");
-const sound = document.getElementById("portalSound");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-// ======================
-// OPÇÃO 2 – DENSIDADE MÉDIA
-// ======================
-const isMobile = window.innerWidth < 768;
-
-const columnCount = isMobile
-  ? Math.floor(canvas.width / 22)
-  : Math.floor(canvas.width / 16);
-
-const speedBase   = isMobile ? 0.9 : 1.4;
-const spawnChance = isMobile ? 0.02 : 0.045;
-
-const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-const columns = [];
-
-const centerX = canvas.width / 2;
-const centerY = canvas.height / 2;
-
-for (let i = 0; i < columnCount; i++) {
-  columns.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    speed: Math.random() * speedBase + 0.4
-  });
-}
-
-function draw() {
-  ctx.fillStyle = "rgba(0,0,0,0.22)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = "#7CFF9E";
-  ctx.font = isMobile ? "14px monospace" : "16px monospace";
-
-  columns.forEach(col => {
-    if (Math.random() < spawnChance) {
-      const char = chars[Math.floor(Math.random() * chars.length)];
-
-      const dx = centerX - col.x;
-      const dy = centerY - col.y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-
-      const pull = Math.max(0.7, 6 - dist / 120);
-
-      col.x += (dx / dist) * col.speed * pull;
-      col.y += (dy / dist) * col.speed * pull;
-
-      ctx.fillText(char, col.x, col.y);
-
-      if (dist < 90) {
-        col.x = Math.random() * canvas.width;
-        col.y = Math.random() * canvas.height;
-      }
-    }
-  });
-
-  requestAnimationFrame(draw);
-}
-
-draw();
-
-// ======================
-// CLIQUE NO PORTAL (SOM + TRANSIÇÃO)
-// ======================
-portal.addEventListener("click", () => {
-  sound.currentTime = 0;
-  sound.play();
-
-  portal.classList.add("fade-out");
-  document.getElementById("warning").classList.add("fade-out");
-
-  setTimeout(() => {
-    window.location.href = "https://x4blaushop.github.io/PLANET-OF-ARCHITECT/";
-  }, 1200);
-});
-
-window.addEventListener("resize", () => {
-  location.reload();
-});
-</script>
-
+        <section class="section status">
+            <p>SISTEMA: X4-BASE-MODULE</p>
+            <p>STATUS: AGUARDANDO KEY_AUTH</p>
+        </section>
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
