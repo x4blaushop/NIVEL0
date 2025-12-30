@@ -3,30 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>X4_GATE_LEVEL_0</title>
+    <title>X4_SYSTEM_GATE</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="pacified-alert" class="toast">SINCRONIA MATRIX C3/X4 ATIVA: ACESSO PERMITIDO.</div>
+    <div id="pacified-alert" class="toast">ATENÇÃO: CONEXÃO DETECTADA. SINCRONIZE PARA ENTRAR.</div>
 
     <canvas id="portalCanvas"></canvas>
 
     <main class="gate-container">
         <section class="section">
-            <h1>UNIT_GATE_0</h1>
-            <p>CONEXÃO ESTABELECIDA. IDENTIDADE MATRIX SINCRONIZADA.</p>
+            <h1>SISTEMA_X4</h1>
+            <p>PORTA 01 ATIVA. AGUARDANDO COMANDO DE ENTRADA.</p>
         </section>
 
         <section class="section">
             <div class="portals">
                 <a href="https://x4blaushop.github.io/ESTADO-0-ATRIO-DO-INFITINO/" class="owner-link">
-                    ATRAVESSAR PORTAL ➡
+                    CONFIRMAR ACESSO ➡
                 </a>
             </div>
-        </section>
-
-        <section class="section status">
-            <p>DNA_AUTH: C3_X4_STABLE</p>
         </section>
     </main>
 
@@ -35,7 +31,7 @@
         window.onload = () => {
             const toast = document.getElementById('pacified-alert');
             toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 4000);
+            setTimeout(() => { toast.classList.remove('show'); }, 5000);
         };
     </script>
 </body>
