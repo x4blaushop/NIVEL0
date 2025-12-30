@@ -8,7 +8,7 @@ body, html {
     width: 100%;
     height: 100%;
     background: #000;
-    color: #62ff8a;
+    color: #62ff8a; /* Identidade Verde Matrix */
     font-family: 'Courier New', monospace;
     overflow: hidden;
     display: flex;
